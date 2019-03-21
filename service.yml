@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: kubernetes-michael
+  name: kubernetes-michael
+  namespace: default
+spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      run: kubernetes-michael
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: kubernetes-michael
+    spec:
+      containers:
+      - image: gcr.io/kubernetes-workshop-stenskjaer/kubernetes-workshop-21:d1e53905a127f7417dd93470800e45f617248c5b
+        imagePullPolicy: IfNotPresent
+        name: kubernetes-michael
+        ports:
+        - containerPort: 9000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
